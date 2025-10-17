@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+* {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+    background-color: var(--secondary-color);
+}
+
+:root {
+  --primary-color: #19183B;
+  --secondary-color: #F3F2EC;
+}
+
+
+.navbar-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+/* Navbar buttons */
+.navbar-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-button {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.nav-button:focus {
+  outline: 2px solid rgba(255,255,255,0.2);
+  outline-offset: 2px;
+}
+
+/* Primary style: background uses primary-color and text uses secondary-color */
+.nav-button--signin {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+
+.nav-button--signup {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.nav-button:hover {
+  transform: translateY(-1px);
+}
+
+/* Modal styles */
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+}
+
+.modal{
+  width: 100%;
+  max-width: 420px;
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.modal-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--primary-color);
+  color: var(--secondary-color);
+}
+
+.modal-body{
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.modal-body label{
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.modal-body input{
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.modal-actions{
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  justify-content: flex-start;
+}
+
+.modal-close{
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.35rem;
+  cursor: pointer;
+}
