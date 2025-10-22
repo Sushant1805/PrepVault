@@ -34,3 +34,15 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## MongoDB connection
+
+This project expects a `MONGODB_URI` environment variable (for example in `.env.local`) that contains the full MongoDB connection string. A small helper lives at `lib/mongodb.js` and will cache the `MongoClient` connection on the global object so the application does not reconnect on every request.
+
+Example `.env.local` entry:
+
+```
+MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.example.mongodb.net/myDatabase?retryWrites=true&w=majority
+```
+
+The helper throws early if `MONGODB_URI` is missing so you get a clear error during startup.
