@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const SignUpModal = ({ onClose, switchToSignIn }) => {
   useEffect(() => {
@@ -16,6 +17,8 @@ const SignUpModal = ({ onClose, switchToSignIn }) => {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [error, setError] = useState(null)
+
+  const router = useRouter()
 
   async function handleRegister(e) {
     e.preventDefault()
@@ -32,20 +35,13 @@ const SignUpModal = ({ onClose, switchToSignIn }) => {
         return
       }
 
-      // store minimal user info locally (the register route returned a user object)
-      try {
-        const toStore = { name: data.user?.name || name, email: data.user?.email || email, image: null }
-        localStorage.setItem('prepvault_user', JSON.stringify(toStore))
-      } catch (err) {
-        // ignore
-      }
-
       // sign in the user after successful registration
       const signInResult = await signIn('credentials', { redirect: false, email, password })
       if (signInResult?.error) {
         setError(signInResult.error || 'Sign in after register failed')
       } else {
         onClose()
+        router.push('/dashboard')
       }
     } catch (err) {
       // eslint-disable-next-line no-console

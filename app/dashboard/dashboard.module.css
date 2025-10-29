@@ -1,0 +1,141 @@
+.dashboardContainer {
+  display: flex;
+  height: 100vh;
+  background-color: #f8fafc;
+  border-radius: 1rem;
+  margin: 0;
+}
+
+/* Sidebar */
+.dashboardSidebar {
+  width: 220px;
+  background-color: #151516;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.sidebarNav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebarNav li {
+  margin: 1rem 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.sidebarNav li:hover {
+  color: var(--secondary-color);
+}
+
+
+.sidebarNav a{
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Main content */
+.dashboardContent {
+  background-color: var(--primary-color);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 2rem;
+  
+}
+
+/* Header */
+.dashboardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.searchBar {
+  flex: 1;
+  max-width: 400px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.addBtn {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.addBtn:hover {
+  background-color: #1e40af;
+}
+
+/* Overview Cards */
+.overviewCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  text-align: center;
+}
+
+.card h3 {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.card p {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Content sections */
+.contentSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.recentProblems {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.contentSection h2 {
+  margin-bottom: 0.8rem;
+}
+
+.recentProblems  ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recentProblems li {
+  margin: 0.5rem 0;
+}

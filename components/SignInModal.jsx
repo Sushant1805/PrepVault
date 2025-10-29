@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const SignInModal = ({ onClose, switchToSignUp }) => {
   useEffect(() => {
@@ -16,6 +17,8 @@ const SignInModal = ({ onClose, switchToSignUp }) => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
 
+  const router = useRouter()
+
   async function handleCredentialsSignIn(e) {
     e.preventDefault()
     setError(null)
@@ -23,36 +26,9 @@ const SignInModal = ({ onClose, switchToSignUp }) => {
     if (res?.error) {
       setError(res.error || 'Sign in failed')
     } else {
-      // store minimal user info locally (will also be available via NextAuth session)
-      try {
-        const toStore = { name: email.split('@')[0], email, image: null }
-        localStorage.setItem('prepvault_user', JSON.stringify(toStore))
-      } catch (err) {
-        // ignore
-      }
-      // close modal on success
+      // close modal on success and navigate to dashboard
       onClose()
-    }
-  }
-
-  // if user clicks Google sign in we open NextAuth popup - store user info from session
-  async function handleGoogleSignIn() {
-    await signIn('google')
-    // NextAuth will redirect or populate session; attempt to read session and store locally
-    try {
-      const res = await fetch('/api/auth/session')
-      if (res.ok) {
-        const data = await res.json()
-        if (data?.user) {
-          const u = data.user
-          const toStore = { name: u.name, email: u.email, image: u.image }
-          localStorage.setItem('prepvault_user', JSON.stringify(toStore))
-          onClose()
-        }
-      }
-    } catch (err) {
-      // ignore
-      onClose()
+      router.push('/dashboard')
     }
   }
 
@@ -68,13 +44,13 @@ const SignInModal = ({ onClose, switchToSignUp }) => {
           <p>Continue with</p>
           <div className="modal-actions modal-grid">
             <div className="provider-column">
-                <button
-                  type="button"
-                  className="nav-button nav-button--signin provider-button"
-                  onClick={handleGoogleSignIn}
-                >
-                  Sign in with Google
-                </button>
+              <button
+                type="button"
+                className="nav-button nav-button--signin provider-button"
+                onClick={() => signIn('google')}
+              >
+                Sign in with Google
+              </button>
             </div>
 
             <div className="form-column">

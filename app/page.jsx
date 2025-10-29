@@ -1,9 +1,16 @@
-import React from 'react'
+"use client"
+import '@/styles/global.css'
 
-const page = () => {
+import React from 'react'
+import Button from '@mui/material/Button'
+import AddIcon from '@mui/icons-material/Add';
+
+const Page = () => {
   return (
-    <div>page</div>
+    <>
+      <h1>Hello</h1>
+    </>
   )
 }
 
-export default page
+export default Page
