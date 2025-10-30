@@ -76,5 +76,36 @@ export const options = {
                         return true;
                     }
         },
+        // Persist the user id into the JWT token and expose it on the session.
+        async jwt({ token, user }) {
+            // On initial sign in, `user` will be available and may contain our id.
+            if (user?.id) {
+                token.id = user.id;
+            }
+
+            // If token doesn't have an id yet but we have an email, try to look up the DB user
+            // (useful for OAuth flows where our signIn upsert ran but `user.id` wasn't attached).
+            if (!token?.id && token?.email) {
+                try {
+                    await connectToMongoose();
+                    const dbUser = await User.findOne({ email: token.email }).select('_id').lean();
+                    if (dbUser?._id) token.id = dbUser._id.toString();
+                } catch (err) {
+                    // eslint-disable-next-line no-console
+                    console.error('JWT callback DB lookup failed:', err);
+                }
+            }
+
+            return token;
+        },
+
+        async session({ session, token }) {
+            // Make the token id available on `session.user.id` for server code.
+            if (token?.id) {
+                session.user = session.user || {};
+                session.user.id = token.id;
+            }
+            return session;
+        },
     },
 };

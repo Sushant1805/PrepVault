@@ -1,9 +1,23 @@
 .dashboardContainer {
   display: flex;
-  height: 100vh;
+  /* Allow the dashboard to grow vertically as content expands while keeping
+     a sensible minimum equal to the viewport height so the layout doesn't
+     collapse on short pages. */
+  min-height: 100vh;
+  height: auto;
   background-color: #f8fafc;
-  border-radius: 1rem;
-  margin: 0;
+  /* make full-bleed: cancel body padding and remove rounded outer gap */
+  border-radius: 0;
+  margin: -1rem; /* cancel the 1rem body padding so the container touches the viewport edges */
+  overflow-y: auto; /* enable scrolling if content exceeds viewport */
+  padding: 0 0 2rem 0;
+}
+
+/* Make the dashboard container span the full available viewport width (minus body padding)
+   so we don't get large centered gutters from the global body centering. */
+.dashboardContainer {
+  width: 100vw;
+  max-width: none;
 }
 
 /* Sidebar */
@@ -29,7 +43,7 @@
 }
 
 .sidebarNav li {
-  margin: 1rem 0;
+  margin: 0.8rem 0;
   cursor: pointer;
   transition: color 0.2s;
 }
@@ -102,6 +116,57 @@
   text-align: center;
 }
 
+/* Premium card styles */
+.premium {
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 8px 30px rgba(2,6,23,0.35);
+  color: white;
+  padding: 1.2rem;
+  text-align: left;
+}
+
+.cardHeader{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:8px;
+}
+
+.cardIcon{
+  width:44px;
+  height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  background: linear-gradient(135deg,#4f46e5,#06b6d4);
+  box-shadow: 0 6px 18px rgba(79,70,229,0.18);
+}
+
+.cardTitle{
+  font-size:0.95rem;
+  color: rgba(255,255,255,0.92);
+  font-weight:600;
+}
+
+.cardNumber{
+  font-size:2.2rem;
+  font-weight:700;
+  margin-top:4px;
+  color: white;
+}
+
+.cardSub{
+  margin-top:8px;
+  color: rgba(255,255,255,0.75);
+  font-size:0.9rem;
+}
+
+.ghost .cardIcon{ background: linear-gradient(135deg,#06b6d4,#7c3aed);} 
+.alert .cardIcon{ background: linear-gradient(135deg,#ef4444,#f97316);} 
+
 .card h3 {
   color: #64748b;
   font-size: 0.9rem;
@@ -125,6 +190,13 @@
   border-radius: 12px;
   padding: 1rem 1.2rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  /* Prevent child content (the table) from visually overflowing the rounded card */
+  overflow: hidden;
+}
+
+/* Make recentProblems span full width of the content grid */
+.recentProblems {
+  grid-column: 1 / -1;
 }
 
 .contentSection h2 {
@@ -138,4 +210,155 @@
 
 .recentProblems li {
   margin: 0.5rem 0;
+}
+
+/* Problems table styles */
+.tableWrapper {
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  /* Clip horizontal overflow and keep the rounded corners intact */
+  overflow-y: hidden;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.problemsTable {
+  /* Allow the table to grow horizontally beyond the container and enable scrolling
+     the wrapper (.tableWrapper) will show a horizontal scrollbar when needed. */
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+.problemsTable th,
+.problemsTable td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #eef2f7;
+  font-size: 0.95rem;
+  white-space: nowrap; /* prevent cells from wrapping and expand table horizontally */
+}
+
+.problemsTable thead th {
+  color: #475569;
+  font-weight: 600;
+}
+
+.problemsTable tbody tr:hover {
+  background: #fbfdff;
+}
+
+.problemsTable a {
+  color: #0b69ff;
+  text-decoration: none;
+}
+
+.problemsTable a:hover {
+  text-decoration: underline;
+}
+
+/* Difficulty badges */
+.diffTag {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+.diffEasy { background: #10b981; } /* green */
+.diffMedium { background: #f59e0b; } /* amber */
+.diffHard { background: #ef4444; } /* red */
+.diffDefault { background: #6b7280; }
+
+/* Status badges */
+.statusTag {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+.statusSolved { background: #0ea5e9; } /* sky */
+.statusAttempted { background: #7c3aed; } /* violet */
+.statusUnsolved { background: #64748b; } /* slate */
+.statusDefault { background: #6b7280; }
+
+/* Note view button */
+.noteButton {
+  background: transparent;
+  border: 1px solid rgba(16,24,40,0.06);
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #0b69ff;
+}
+.noteButton:hover{ background: rgba(11,105,255,0.06); }
+
+/* Note modal (lightweight) */
+.noteModalOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+.noteModal{
+  width: 92%;
+  max-width: 680px;
+  background: white;
+  color: #0f1720;
+  border-radius: 10px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+  overflow: auto;
+}
+.noteModalHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #eef2f7;
+}
+.noteModalContent{
+  padding: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.noteModalClose{
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Edit / Delete buttons */
+.editButton{
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.editButton:hover{ background: rgba(0,0,0,0.03); }
+.deleteButton{
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.deleteButton:disabled{ opacity: 0.6; cursor: not-allowed }
+
+/* small helper for MUI icon buttons alignment */
+.muiIconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
