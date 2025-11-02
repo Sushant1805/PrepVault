@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect } from 'react'
 import { signIn } from 'next-auth/react'
+import { FcGoogle } from "react-icons/fc";
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -41,17 +42,8 @@ const SignInModal = ({ onClose, switchToSignUp }) => {
         </header>
 
         <div className="modal-body">
-          <p>Continue with</p>
           <div className="modal-actions modal-grid">
-            <div className="provider-column">
-              <button
-                type="button"
-                className="nav-button nav-button--signin provider-button"
-                onClick={() => signIn('google')}
-              >
-                Sign in with Google
-              </button>
-            </div>
+      
 
             <div className="form-column">
               <form onSubmit={handleCredentialsSignIn} className="credentials-form">
@@ -72,6 +64,15 @@ const SignInModal = ({ onClose, switchToSignUp }) => {
 
                 {error && <div className="form-error">{error}</div>}
               </form>
+            </div>
+            <div className="provider-column">
+              <button
+                type="button"
+                className="nav-button nav-button--signin provider-button"
+                onClick={() => signIn('google')}
+              >
+                < FcGoogle style={{height:"20px",textAlign:"center"}}/> Sign in with Google
+              </button>
             </div>
           </div>
         </div>

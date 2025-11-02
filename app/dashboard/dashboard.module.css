@@ -5,18 +5,18 @@
      collapse on short pages. */
   min-height: 100vh;
   height: auto;
-  background-color: #f8fafc;
-  /* make full-bleed: cancel body padding and remove rounded outer gap */
-  border-radius: 0;
-  margin: -1rem; /* cancel the 1rem body padding so the container touches the viewport edges */
+  /* match the dashboard content dark background so there is no white strip */
+  background-color: var(--primary-color);
+  border-radius: 1rem;
+  margin: 0;
   overflow-y: auto; /* enable scrolling if content exceeds viewport */
-  padding: 0 0 2rem 0;
+  padding-bottom: 2rem;
 }
 
 /* Make the dashboard container span the full available viewport width (minus body padding)
    so we don't get large centered gutters from the global body centering. */
 .dashboardContainer {
-  width: 100vw;
+  width: calc(100vw - 2rem);
   max-width: none;
 }
 
@@ -75,6 +75,20 @@
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 2rem;
+}
+
+/* Greeting title and subtitle in header */
+.greetingTitle {
+  color: #ffffff;
+  font-size: 1.6rem;
+  margin: 0 0 0.15rem 0;
+  font-weight: 700;
+}
+
+.greetingSubtitle {
+  margin: 0;
+  color: rgba(255,255,255,0.75);
+  font-size: 0.95rem;
 }
 
 .searchBar {
@@ -185,13 +199,14 @@
   gap: 1.5rem;
 }
 
+
 .recentProblems {
-  background: white;
+  /* Make the section blend with the dashboard background instead of a large white card */
+  background: transparent;
   border-radius: 12px;
   padding: 1rem 1.2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  /* Prevent child content (the table) from visually overflowing the rounded card */
-  overflow: hidden;
+  box-shadow: none;
+  overflow: visible;
 }
 
 /* Make recentProblems span full width of the content grid */
@@ -210,6 +225,11 @@
 
 .recentProblems li {
   margin: 0.5rem 0;
+}
+
+/* Ensure headings inside the recentProblems section are visible on dark background */
+.recentProblems h2, .recentProblems h3 {
+  color: #ffffff;
 }
 
 /* Problems table styles */
@@ -236,22 +256,23 @@
 .problemsTable td {
   text-align: left;
   padding: 0.6rem 0.75rem;
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
   font-size: 0.95rem;
   white-space: nowrap; /* prevent cells from wrapping and expand table horizontally */
+  color: #e6eef8; /* light body text for contrast on dark background */
 }
 
 .problemsTable thead th {
-  color: #475569;
+  color: #94a3b8; /* muted header labels for clear hierarchy */
   font-weight: 600;
 }
 
 .problemsTable tbody tr:hover {
-  background: #fbfdff;
+  background: rgba(255,255,255,0.02); /* subtle lightening on hover */
 }
 
 .problemsTable a {
-  color: #0b69ff;
+  color: #60a5fa; /* brighter blue for links */
   text-decoration: none;
 }
 
@@ -361,4 +382,285 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Topics flash card grid */
+.topicGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.topicCard {
+  background: #ffffff; /* white card for clear readability */
+  border: 1px solid #e6eef6;
+  border-radius: 12px;
+  padding: 1rem;
+  color: #0f1720; /* dark text for readability */
+  box-shadow: 0 6px 18px rgba(2,6,23,0.08);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 150px;
+}
+
+.topicCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(2,6,23,0.12);
+}
+
+.topicCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.topicCardTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f1720;
+}
+
+.topicImportance {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #07122a;
+}
+.importance-High { background: #ffb4a2; }
+.importance-Normal { background: #ffd98a; }
+.importance-Low { background: #c7f9cc; }
+
+.topicDescription {
+  margin-top: 0.6rem;
+  color: #374151; /* slate-700 for comfortable reading */
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.topicMeta {
+  margin-top: 0.65rem;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  background: #f1f5f9; /* light gray chip */
+  color: #0f1720;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.topicResources {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  color: #0f1720;
+}
+
+.topicActions {
+  margin-top: 0.9rem;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(15,23,42,0.06);
+  color: #0f1720;
+  padding: 0.45rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg,#06b6d4,#4f46e5);
+  color: white;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .contentSection { grid-template-columns: 1fr; }
+}
+
+/* Topic detail / editor styles - premium look */
+.topicDetailWrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.topicDetailCard {
+  margin-top: 1rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 14px;
+  padding: 1.4rem;
+  box-shadow: 0 12px 40px rgba(2,6,23,0.45);
+  color: #e6eef8;
+}
+
+.topicDetailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 0.9rem;
+}
+
+.topicTitleLarge {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.topicSubtitle {
+  color: rgba(255,255,255,0.72);
+  margin: 4px 0 0 0;
+  font-size: 0.95rem;
+}
+
+.topicHeaderActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.importanceBadge {
+  background: linear-gradient(90deg,#ff8a65,#ffb199);
+  color: #06121a;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.actionBtn {
+  padding: 0.5rem 0.9rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+.actionBtn.ghost { background: transparent; border: 1px solid rgba(255,255,255,0.06); color: #e6eef8 }
+.actionBtn.primary { background: linear-gradient(90deg,#06b6d4,#7c4dff); color: white }
+
+.topicDetailContent {
+  display: grid;
+  /* give the main column more space and a slightly wider revisions column */
+  grid-template-columns: 1fr 440px;
+  gap: 1.4rem;
+  align-items: start;
+}
+
+.topicMain {
+  color: rgba(255,255,255,0.92);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.resourceList a { color: #93c5fd; text-decoration: underline; }
+
+.revisionsPanel {
+  background: rgba(255,255,255,0.02);
+  border-radius: 10px;
+  padding: 0.9rem;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.revisionsPanel h4 { margin: 0 0 8px 0; color: #ffffff }
+.revisionItem { padding: 0.6rem; border-radius: 8px; margin-bottom: 0.6rem; background: rgba(255,255,255,0.01); }
+.revisionItem small { color: rgba(255,255,255,0.6); }
+
+.muted { color: rgba(255,255,255,0.6); }
+
+/* Form inputs and editor spacing */
+.topicFormInput {
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  color: inherit;
+  margin-top: 8px;
+  box-sizing: border-box;
+  font-size: 1.02rem;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.topicFormInput:focus {
+  outline: none;
+  border-color: rgba(124,77,255,0.9);
+  box-shadow: 0 6px 20px rgba(124,77,255,0.06);
+}
+
+.topicTitleInput {
+  padding: 16px 14px;
+  font-size: 1.05rem;
+  border-radius: 12px;
+}
+
+.topicFormRow { display: grid; gap: 12px; grid-template-columns: 1.6fr 1fr; align-items: start; }
+
+.topicActionRow { display: flex; gap: 12px; justify-content: flex-start; margin-top: 14px; }
+
+/* Module-friendly button utilities for consistent usage from components */
+.actionBtnPrimary {
+  padding: 0.5rem 0.95rem;
+  border-radius: 10px;
+  background: linear-gradient(90deg,#06b6d4,#7c4dff);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+.actionBtnGhost {
+  padding: 0.46rem 0.9rem;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #e6eef8;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+/* Form buttons used inside topic editor form */
+.btnPrimary {
+  background: linear-gradient(90deg,#06b6d4,#4f46e5);
+  color: white;
+  padding: 0.55rem 0.95rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  min-width: 96px;
+}
+.btnGhost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #e6eef8;
+  padding: 0.5rem 0.9rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.topicHeaderActions { display: flex; gap: 12px; align-items: center; }
+
+@media (max-width: 920px) {
+  .topicDetailContent { grid-template-columns: 1fr; }
+  .topicDetailWrapper { padding: 0 0.5rem }
 }

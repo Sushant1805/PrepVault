@@ -74,10 +74,8 @@ const DashboardPage = async () => {
         <h2 className={styles.logo}>PrepVault</h2>
         <nav className={styles.sidebarNav}>
           <ul>
-            <li><Link href="/Dashboard">🏠 Dashboard</Link></li>
-            <li><Link href="#">📚 Topics</Link></li>
-            <li><Link href="#">📝 Notes</Link></li>
-            <li><Link href="#">⭐ Favorites</Link></li>
+            <li><Link href="/dashboard">🏠 Dashboard</Link></li>
+            <li><Link href="/dashboard/topics">📚 Topics</Link></li>
             <li><Link href="/dashboard/settings">⚙️ Settings</Link></li>
           </ul>
         </nav>
@@ -87,7 +85,10 @@ const DashboardPage = async () => {
       <main className={styles.dashboardContent}>
         {/* Header */}
         <header className={styles.dashboardHeader}>
-          <h1 style={{color:`white`}}>Hey {displayName} 👋</h1>
+          <div>
+            <h1 className={styles.greetingTitle}>Hey {displayName} 👋</h1>
+            <p className={styles.greetingSubtitle}>Keep the momentum — review one topic or problem today to stay sharp.</p>
+          </div>
           {/* Search is handled by the client-side SearchableProblems component below */}
           <AddProblemButton />
         </header>

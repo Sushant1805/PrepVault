@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { FcGoogle } from "react-icons/fc";
 
 const SignUpModal = ({ onClose, switchToSignIn }) => {
   useEffect(() => {
@@ -59,17 +60,9 @@ const SignUpModal = ({ onClose, switchToSignIn }) => {
         </header>
 
         <div className="modal-body">
-          <p>Continue with</p>
+      
           <div className="modal-actions modal-grid">
-            <div className="provider-column">
-              <button
-                type="button"
-                className="nav-button nav-button--signin provider-button"
-                onClick={() => signIn('google')}
-              >
-                Sign up with Google
-              </button>
-            </div>
+    
 
             <div className="form-column">
               <form onSubmit={handleRegister} className="credentials-form">
@@ -95,6 +88,15 @@ const SignUpModal = ({ onClose, switchToSignIn }) => {
 
                 {error && <div className="form-error">{error}</div>}
               </form>
+            </div>
+            <div className="provider-column">
+              <button
+                type="button"
+                className="nav-button nav-button--signin provider-button"
+                onClick={() => signIn('google')}
+              >
+               <FcGoogle/> Sign up with Google
+              </button>
             </div>
           </div>
         </div>
