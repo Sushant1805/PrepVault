@@ -1,7 +1,6 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { signIn } from 'next-auth/react'
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { FcGoogle } from "react-icons/fc";
 
@@ -18,12 +17,16 @@ const SignUpModal = ({ onClose, switchToSignIn }) => {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [toast, setToast] = useState({ open: false, message: '', tone: 'info' })
+  const toastTimer = useRef(null)
 
   const router = useRouter()
 
   async function handleRegister(e) {
     e.preventDefault()
     setError(null)
+    setIsLoading(true)
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -33,6 +36,7 @@ const SignUpModal = ({ onClose, switchToSignIn }) => {
       const data = await res.json()
       if (!res.ok) {
         setError(data?.error || 'Registration failed')
+        setIsLoading(false)
         return
       }
 
@@ -40,15 +44,31 @@ const SignUpModal = ({ onClose, switchToSignIn }) => {
       const signInResult = await signIn('credentials', { redirect: false, email, password })
       if (signInResult?.error) {
         setError(signInResult.error || 'Sign in after register failed')
+        setIsLoading(false)
       } else {
-        onClose()
-        router.push('/dashboard')
+        // show success toast briefly then navigate so the toast is visible
+        showToast('Account created — signed in', 'success')
+        setTimeout(() => {
+          onClose()
+          router.push('/dashboard')
+          setIsLoading(false)
+        }, 700)
       }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error('Register error:', err)
       setError('Server error')
+      setIsLoading(false)
     }
+  }
+
+  function showToast(message, tone = 'info') {
+    if (toastTimer.current) {
+      clearTimeout(toastTimer.current)
+      toastTimer.current = null
+    }
+    setToast({ open: true, message, tone })
+    toastTimer.current = setTimeout(() => setToast({ open: false, message: '', tone: 'info' }), 4200)
   }
 
   return (
@@ -82,8 +102,17 @@ const SignUpModal = ({ onClose, switchToSignIn }) => {
                 </label>
 
                 <div className="form-actions">
-                  <button type="submit" className="nav-button nav-button--primary">Create account</button>
-                  <button type="button" className="nav-button nav-button--outline" onClick={switchToSignIn}>Have an account? Sign in</button>
+                  <button type="submit" className="nav-button nav-button--primary" disabled={isLoading} aria-busy={isLoading}>
+                    {isLoading ? (
+                      <span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}>
+                        <span className="spinner" aria-hidden>
+                          <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeDasharray="31.4 31.4"/></svg>
+                        </span>
+                        Creating...
+                      </span>
+                    ) : 'Create account'}
+                  </button>
+                  <button type="button" className="nav-button nav-button--outline" onClick={switchToSignIn} disabled={isLoading}>Have an account? Sign in</button>
                 </div>
 
                 {error && <div className="form-error">{error}</div>}
@@ -93,13 +122,31 @@ const SignUpModal = ({ onClose, switchToSignIn }) => {
               <button
                 type="button"
                 className="nav-button nav-button--signin provider-button"
-                onClick={() => signIn('google')}
+                onClick={() => { setIsLoading(true); signIn('google') }}
+                disabled={isLoading}
+                aria-busy={isLoading}
               >
-               <FcGoogle/> Sign up with Google
+               <FcGoogle/>{isLoading ? (
+                 <span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}>
+                   <span className="spinner" aria-hidden>
+                     <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeDasharray="31.4 31.4"/></svg>
+                   </span>
+                   Signing up...
+                 </span>
+               ) : ' Sign up with Google'}
               </button>
             </div>
           </div>
         </div>
+      </div>
+      {/* Toast container (bottom-right) */}
+      <div aria-live="polite" aria-atomic="true">
+        {toast.open && (
+          <div className={`toast ${toast.tone === 'success' ? 'toast--success' : toast.tone === 'error' ? 'toast--error' : 'toast--info'}`} role="status">
+            <div className="toast-message">{toast.message}</div>
+            <button className="toast-close" aria-label="Close" onClick={() => setToast({ open: false, message: '', tone: 'info' })}>&times;</button>
+          </div>
+        )}
       </div>
     </div>
   )

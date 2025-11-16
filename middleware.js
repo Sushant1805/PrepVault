@@ -18,9 +18,14 @@ export async function middleware(req) {
     return NextResponse.next()
   }
 
-  // Previously we redirected unauthenticated users to the NextAuth sign-in page here.
-  // We'll no longer redirect for /dashboard so the client can show a modal-based auth UX.
-  // This middleware will still run for the configured matcher but will not enforce a redirect.
+  // Protect /dashboard routes
+  if (pathname.startsWith('/dashboard')) {
+    if (!token) {
+      const signInUrl = new URL('/api/auth/signin', req.url)
+      signInUrl.searchParams.set('callbackUrl', req.nextUrl.pathname)
+      return NextResponse.redirect(signInUrl)
+    }
+  }
 
   return NextResponse.next()
 }

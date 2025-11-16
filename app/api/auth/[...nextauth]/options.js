@@ -15,20 +15,28 @@ export const options = {
             },
             async authorize(credentials, req) {
                 // basic validation
-                if (!credentials?.email || !credentials?.password) return null;
+                if (!credentials?.email || !credentials?.password) {
+                    throw new Error('Email and password are required')
+                }
+
                 try {
                     await connectToMongoose();
                     const user = await User.findOne({ email: credentials.email }).exec();
-                    if (!user || !user.password) return null;
+                    if (!user || !user.password) {
+                        throw new Error('Invalid email or password')
+                    }
                     const match = await bcrypt.compare(credentials.password, user.password);
-                    if (!match) return null;
+                    if (!match) {
+                        throw new Error('Invalid email or password')
+                    }
 
                     // return a minimal user object NextAuth will put in the session
                     return { id: user._id.toString(), name: user.name, email: user.email, image: user.image };
                 } catch (err) {
                     // eslint-disable-next-line no-console
                     console.error('Error in credentials authorize:', err);
-                    return null;
+                    // Avoid returning internal error details to the client. Provide a safe message.
+                    throw new Error(err?.message || 'Authentication failed')
                 }
             },
         }),

@@ -459,6 +459,22 @@ body{
   to{ opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* Spinner utility */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+.spinner svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Modern, sleek scrollbar styles (WebKit & Firefox) */
 /* Applies to body, overlay and modal */
 body, .modal-overlay, .modal {
