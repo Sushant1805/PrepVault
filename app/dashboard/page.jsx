@@ -18,14 +18,35 @@ const DashboardPage = async () => {
   let problems = [];
   let fetchError = false;
   try {
-    const res = await fetch('http://localhost:3000/api/problems');
-    if (res.ok) {
-      const json = await res.json();
-      problems = json?.problems || [];
-    } else {
-      fetchError = true;
-    }
+    // Read directly from the database on the server to avoid depending on
+    // an absolute localhost URL (which fails on deployed hosts).
+    await connectToMongoose();
+    const userId = session?.user?.id;
+    const query = userId ? { userId } : {};
+    const docs = await Problem.find(query).sort({ createdAt: -1 }).limit(50).lean();
+    // Convert Mongoose/BSON types (ObjectId, Date) to plain JS values so they
+    // can be passed from this Server Component to Client Components.
+    problems = docs.map((d) => ({
+      // keep legacy `_id` string usage used across client components
+      _id: d._id?.toString(),
+      id: d._id?.toString(),
+      title: d.title || '',
+      link: d.link || '',
+      topic: d.topic || '',
+      subtopics: Array.isArray(d.subtopics) ? d.subtopics : (d.subtopics || []),
+      difficulty: d.difficulty || '',
+      platform: d.platform || '',
+      status: d.status || '',
+      note: d.note || '',
+      revisionCount: d.revisionCount || 0,
+      tags: Array.isArray(d.tags) ? d.tags : (d.tags || []),
+      userId: d.userId ? d.userId.toString() : null,
+      createdAt: d.createdAt ? d.createdAt.toISOString() : null,
+      updatedAt: d.updatedAt ? d.updatedAt.toISOString() : null,
+    }));
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Failed to load problems server-side:', err);
     fetchError = true;
   }
 
